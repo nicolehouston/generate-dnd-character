@@ -1,6 +1,6 @@
 import { useState } from "react";
 import OpenAI from 'openai';
-import { Box, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, TextField } from '@mui/material';
+import { Box, Button, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, TextField, Typography } from '@mui/material';
 
 const client = new OpenAI({
     apiKey: process.env.REACT_APP_OPENAI_API_KEY,
@@ -54,15 +54,16 @@ const CharacterImage = () => {
     }
 
     return (
-        <Box>
-            <Box>
-                <Box>
+        <Box display="flex" flexDirection="column" paddingTop={8} alignItems="center">
+            <Box width="80%" border="solid 1px" p={2}>
+                <Box mb={3}>
                     <FormControl>
                         <FormLabel id="character-sex-buttons">Sex</FormLabel>
                         <RadioGroup
                             row
                             aria-labelledby="character-sex-buttons-group-label"
                             name="character-sex-buttons-group"
+                            defaultValue="female"
                             onChange={setCharacterSex}
                         >
                             <FormControlLabel value="male" control={<Radio />} label="Male" />
@@ -70,13 +71,14 @@ const CharacterImage = () => {
                         </RadioGroup>
                     </FormControl>
                 </Box>
-                <Box>
+                <Box mb={3}>
                     <FormControl>
                         <FormLabel id="character-race-buttons">Race</FormLabel>
                         <RadioGroup
                             row
                             aria-labelledby="character-race-buttons-group-label"
                             name="character-race-buttons-group"
+                            defaultValue="human"
                             onChange={setCharacterRace}
                         >
                             <FormControlLabel value="elf" control={<Radio />} label="Elf" />
@@ -90,13 +92,14 @@ const CharacterImage = () => {
                         </RadioGroup>
                     </FormControl>
                 </Box>
-                <Box>
+                <Box mb={3}>
                     <FormControl>
                         <FormLabel id="character-style-buttons">Style</FormLabel>
                         <RadioGroup
                             row
                             aria-labelledby="character-style-buttons-group-label"
                             name="character-style-buttons-group"
+                            defaultValue="cartoon"
                             onChange={setCharacterStyle}
                         >
                             <FormControlLabel value="cartoon" control={<Radio />} label="Cartoon" />
@@ -105,17 +108,17 @@ const CharacterImage = () => {
                         </RadioGroup>
                     </FormControl>
                 </Box>
-                <Box>
+                <Box mb={3}>
                     <TextField id="character-age" label="Age" inputProps={{ min: 1 }} onKeyDown={(event) => {
                         if (event?.key === '-' || event?.key === '+') {
                             event.preventDefault();
                         }
                     }} size="small" variant="outlined" type="number" onChange={setCharacterAge} />
                 </Box>
+                <Button onClick={generateImage} disabled={isLoading} variant="outlined">
+                    Generate Image
+                </Button>
             </Box>
-            <button onClick={generateImage} disabled={isLoading}>
-                Generate Image
-            </button>
             {isLoading && <p>Generating image...</p>}
             {error && <p>{error}</p>}
             {imageUrl && <img src={imageUrl} alt="Generated character image" />}
